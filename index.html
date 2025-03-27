@@ -6,6 +6,12 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap');
 
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
     body {
       font-family: 'Kiwi Maru', 'sans-serif';
       background: linear-gradient(to bottom, #ffe0f0, #fff0f8);
@@ -13,7 +19,7 @@
       text-align: center;
       padding: 40px;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     h1 {
@@ -69,7 +75,7 @@
 
     /* キラキラ星背景 */
     .stars {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -80,7 +86,7 @@
                         radial-gradient(#ffcce6 1px, transparent 1px);
       background-size: 100px 100px;
       animation: twinkle 10s linear infinite;
-      opacity: 0.4;
+      opacity: 0.3;
     }
 
     @keyframes twinkle {
@@ -88,7 +94,7 @@
       100% { background-position: 100px 100px, 150px 150px; }
     }
 
-    /* カードのフェードイン */
+    /* フェードインアニメ */
     @keyframes fadeInUp {
       from {
         opacity: 0;
