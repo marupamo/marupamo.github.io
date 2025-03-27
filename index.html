@@ -4,47 +4,44 @@
   <meta charset="UTF-8">
   <title>まるぱも｜Official Site</title>
   <style>
-    /* Googleフォントの読み込み */
     @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap');
 
-    /* 全体のスタイル設定 */
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
       font-family: 'Kiwi Maru', sans-serif;
       background: linear-gradient(to bottom, #ffe0f0, #fff0f8);
       color: #555;
-      text-align: center;
-      padding: 40px;
-      margin: 0;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    /* 見出しのスタイル */
+    body {
+      text-align: center;
+      padding: 40px;
+    }
+
     h1 {
       color: #ff66a3;
       font-size: 3em;
       margin-bottom: 10px;
     }
 
-    /* カード型コンテナのスタイル */
     .card {
       background: rgba(255, 255, 255, 0.9);
       border-radius: 20px;
       padding: 25px;
       max-width: 700px;
-      margin: 20px auto;
+      margin: 40px auto;
       box-shadow: 0 5px 15px rgba(255, 102, 163, 0.2);
-      position: relative;
-      z-index: 1;
+      animation: fadeInUp 1.2s ease both;
     }
 
-    /* カード内の見出しスタイル */
     .card h2 {
       color: #ff66a3;
       font-size: 1.5em;
       margin-bottom: 10px;
     }
 
-    /* リンクのスタイル */
     a {
       color: #ff66a3;
       text-decoration: none;
@@ -55,7 +52,6 @@
       text-decoration: underline;
     }
 
-    /* iframeのスタイル */
     iframe {
       width: 100%;
       height: 315px;
@@ -64,34 +60,36 @@
       margin-top: 15px;
     }
 
-    /* 背景エフェクト用のキャンバススタイル */
-    #particleCanvas {
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    canvas {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
       z-index: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
+  <canvas id="bgCanvas"></canvas>
 
-  <!-- 背景エフェクト用のキャンバス -->
-  <canvas id="particleCanvas"></canvas>
-
-  <!-- メインコンテンツ -->
   <h1>まるぱも⚡🐾</h1>
 
-  <!-- 自己紹介カード -->
   <div class="card">
     <p>みんなまるっと虜になぁれ💫</p>
     <p>可愛い～かっこいいまでビリビリ痺れる歌をお届けしています🎤</p>
     <p>「ColorSing」で毎日配信中🎵</p>
   </div>
-
-  <!-- 各種リンクカード -->
   <div class="card">
     <h2>▶ 各種リンク</h2>
     <p><a href="https://colorsing.page.link/HGdvb8BgDGYA782r8" target="_blank">ColorSing</a></p>
@@ -100,76 +98,102 @@
     <p><a href="https://www.youtube.com/@marupamo" target="_blank">YouTube</a></p>
   </div>
 
-  <!-- BOOTHショップ埋め込みカード -->
   <div class="card">
-    <h2>▶ まるぱもBOOTHショップ</h2>
-    <iframe src="https://marupamo.booth.pm" width="100%" height="600" style="border: none; border-radius: 15px;"></iframe>
+    <h2>▶ まるぱもグッズ</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+      <a href="https://booth.pm/ja/items/6505462" target="_blank" style="text-align:center;">
+        <img src="https://booth.pximg.net/c/620x620/8e1c6816-65e0-4213-bbe9-ff9814bc2de2/i/6505462/1cc0e6b0-4e50-4e1e-a4d0-b653b2764b2b_base_resized.jpg" style="width:180px; border-radius:10px;"><br>
+        <span>オリジナルロンT</span>
+      </a>
+      <a href="https://booth.pm/ja/items/6505492" target="_blank" style="text-align:center;">
+        <img src="https://booth.pximg.net/c/620x620/9b9910be-b93b-4712-8109-3f6bc9fa4913/i/6505492/54276c66-0d73-4a2f-8ad2-7182b7f3b1df_base_resized.jpg" style="width:180px; border-radius:10px;"><br>
+        <span>トレーディングミニ缶バッジ</span>
+      </a>
+      <a href="https://booth.pm/ja/items/6091559" target="_blank" style="text-align:center;">
+        <img src="https://booth.pximg.net/c/620x620/ca35dfd8-b06c-4d9b-8715-f4bfb54f7fa0/i/6091559/26e94e7d-0c2a-4c3c-97e3-4a9c6b8ae19b_base_resized.jpg" style="width:180px; border-radius:10px;"><br>
+        <span>ミニアクリルスタンド</span>
+      </a>
+    </div>
+    <p style="margin-top:20px;">
+      <a href="https://marupamo.booth.pm" target="_blank">▶ BOOTHショップをもっと見る</a>
+    </p>
   </div>
-
-  <!-- オリジナル楽曲紹介カード -->
   <div class="card">
     <h2>▶ オリジナル楽曲『My Drama』</h2>
     <iframe src="https://www.youtube.com/embed/bGCZxHnKcXw" allowfullscreen></iframe>
   </div>
 
-  <!-- 背景エフェクトのスクリプト -->
   <script>
-    const canvas = document.getElementById('particleCanvas');
+    const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
-
-    let particles = [];
-    const colors = ['rgba(255, 182, 193, 0.8)', 'rgba(255, 255, 255, 0.8)', 'rgba(255, 105, 180, 0.8)'];
-    const symbols = ['⚡', '🐾'];
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // パーティクルの初期設定
-    function initParticles() {
-      particles = [];
-      for (let i = 0; i < 100; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          radius: Math.random() * 4 + 1,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          symbol: Math.random() > 0.8 ? symbols[Math.floor(Math.random() * symbols.length)] : null,
-          speedX: (Math.random() - 0.5) * 1.5,
-          speedY: (Math.random() - 0.5) * 1.5,
-          opacity: Math.random() * 0.5 + 0.5
-        });
-      }
+    let particles = [];
+
+    function createParticle() {
+      const size = Math.random() * 10 + 5;
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const speedX = (Math.random() - 0.5) * 0.5;
+      const speedY = (Math.random() - 0.5) * 0.5;
+      const opacity = Math.random() * 0.3 + 0.2;
+      const type = Math.random();
+      let color = 'rgba(255, 182, 193,' + opacity + ')';
+      return { x, y, size, speedX, speedY, opacity, type, color };
     }
 
-    // パーティクルの描画
-    function drawParticles() {
+    function drawHeart(x, y, size, color) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(size / 30, size / 30);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(0, -3, -5, -15, -15, -15);
+      ctx.bezierCurveTo(-35, -15, -35, 10, -35, 10);
+      ctx.bezierCurveTo(-35, 25, -20, 40, 0, 50);
+      ctx.bezierCurveTo(20, 40, 35, 25, 35, 10);
+      ctx.bezierCurveTo(35, 10, 35, -15, 15, -15);
+      ctx.bezierCurveTo(5, -15, 0, -3, 0, 0);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => {
-        ctx.beginPath();
-        if (p.symbol) {
-          ctx.font = `${p.radius * 5}px Arial`;
+        if (p.type < 0.7) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
           ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.opacity;
-          ctx.fillText(p.symbol, p.x, p.y);
-        } else {
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.opacity;
           ctx.fill();
+        } else {
+          drawHeart(p.x, p.y, p.size, p.color);
         }
-        ctx.closePath();
-      });
-    }
 
-    // パーティクルの更新
-    function updateParticles() {
-      particles.forEach(p => {
         p.x += p.speedX;
         p.y += p.speedY;
 
-        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+        if (p.x < -50 || p.x > canvas.width + 50 || p.y < -50 || p.y > canvas.height + 50) {
+          Object.assign(p, createParticle());
+        }
       });
+      requestAnimationFrame(animate);
     }
 
-    //
+    for (let i = 0; i < 100; i++) {
+      particles.push(createParticle());
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+
+</body>
+</html>
