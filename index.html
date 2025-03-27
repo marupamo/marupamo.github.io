@@ -4,34 +4,30 @@
   <meta charset="UTF-8">
   <title>まるぱも｜Official Site</title>
   <style>
+    /* Googleフォントの読み込み */
     @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap');
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-    }
-
+    /* 全体のスタイル設定 */
     body {
       font-family: 'Kiwi Maru', sans-serif;
       background: linear-gradient(to bottom, #ffe0f0, #fff0f8);
       color: #555;
       text-align: center;
       padding: 40px;
-      position: relative;
-      overflow-x: hidden;
+      margin: 0;
+      overflow: hidden;
     }
 
+    /* 見出しのスタイル */
     h1 {
       color: #ff66a3;
       font-size: 3em;
       margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
     }
 
+    /* カード型コンテナのスタイル */
     .card {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 20px;
       padding: 25px;
       max-width: 700px;
@@ -39,15 +35,16 @@
       box-shadow: 0 5px 15px rgba(255, 102, 163, 0.2);
       position: relative;
       z-index: 1;
-      animation: fadeInUp 1s ease both;
     }
 
+    /* カード内の見出しスタイル */
     .card h2 {
       color: #ff66a3;
       font-size: 1.5em;
       margin-bottom: 10px;
     }
 
+    /* リンクのスタイル */
     a {
       color: #ff66a3;
       text-decoration: none;
@@ -58,6 +55,7 @@
       text-decoration: underline;
     }
 
+    /* iframeのスタイル */
     iframe {
       width: 100%;
       height: 315px;
@@ -66,9 +64,8 @@
       margin-top: 15px;
     }
 
-    /* アニメーション系コンテナ */
-    .hearts-container,
-    .sparkles-container {
+    /* 背景エフェクト用のキャンバススタイル */
+    #particleCanvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -76,58 +73,25 @@
       height: 100%;
       pointer-events: none;
       z-index: 0;
-      overflow: hidden;
-    }
-
-    .heart, .sparkle {
-      position: absolute;
-      animation: fall linear infinite;
-      opacity: 0.7;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-10%) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    /* カードフェードイン */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
   </style>
 </head>
 <body>
 
-  <!-- アニメーション用コンテナ -->
-  <div class="hearts-container"></div>
-  <div class="sparkles-container"></div>
+  <!-- 背景エフェクト用のキャンバス -->
+  <canvas id="particleCanvas"></canvas>
 
+  <!-- メインコンテンツ -->
   <h1>まるぱも⚡🐾</h1>
 
+  <!-- 自己紹介カード -->
   <div class="card">
     <p>みんなまるっと虜になぁれ💫</p>
     <p>可愛い～かっこいいまでビリビリ痺れる歌をお届けしています🎤</p>
     <p>「ColorSing」で毎日配信中🎵</p>
   </div>
 
-  <div class="card">
-    <h2>▶ オリジナル楽曲『My Drama』</h2>
-    <iframe src="https://www.youtube.com/embed/bGCZxHnKcXw" allowfullscreen></iframe>
-  </div>
-
+  <!-- 各種リンクカード -->
   <div class="card">
     <h2>▶ 各種リンク</h2>
     <p><a href="https://colorsing.page.link/HGdvb8BgDGYA782r8" target="_blank">ColorSing</a></p>
@@ -136,52 +100,76 @@
     <p><a href="https://www.youtube.com/@marupamo" target="_blank">YouTube</a></p>
   </div>
 
-  <!-- アニメーションスクリプト -->
+  <!-- BOOTHショップ埋め込みカード -->
+  <div class="card">
+    <h2>▶ まるぱもBOOTHショップ</h2>
+    <iframe src="https://marupamo.booth.pm" width="100%" height="600" style="border: none; border-radius: 15px;"></iframe>
+  </div>
+
+  <!-- オリジナル楽曲紹介カード -->
+  <div class="card">
+    <h2>▶ オリジナル楽曲『My Drama』</h2>
+    <iframe src="https://www.youtube.com/embed/bGCZxHnKcXw" allowfullscreen></iframe>
+  </div>
+
+  <!-- 背景エフェクトのスクリプト -->
   <script>
-    const heartColors = ['#ffb6c1', '#ffd1dc', '#ffccf9', '#e0bbff', '#cce5ff'];
-    const sparkleColors = ['#fff5cc', '#ffe4e1', '#ffffff'];
-    const bonusEmojis = ['⚡️', '🐾']; // たまに出るやつ！
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
 
-    const heartContainer = document.querySelector('.hearts-container');
-    const sparkleContainer = document.querySelector('.sparkles-container');
+    let particles = [];
+    const colors = ['rgba(255, 182, 193, 0.8)', 'rgba(255, 255, 255, 0.8)', 'rgba(255, 105, 180, 0.8)'];
+    const symbols = ['⚡', '🐾'];
 
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-      // たまに⚡️や🐾を出す（15%くらいの確率）
-      if (Math.random() < 0.15) {
-        heart.textContent = bonusEmojis[Math.floor(Math.random() * bonusEmojis.length)];
-        heart.style.opacity = 0.3; // ふんわり透明
-      } else {
-        heart.textContent = '❤';
-        heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+    // パーティクルの初期設定
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 4 + 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          symbol: Math.random() > 0.8 ? symbols[Math.floor(Math.random() * symbols.length)] : null,
+          speedX: (Math.random() - 0.5) * 1.5,
+          speedY: (Math.random() - 0.5) * 1.5,
+          opacity: Math.random() * 0.5 + 0.5
+        });
       }
-
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
-      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-
-      heartContainer.appendChild(heart);
-      setTimeout(() => heart.remove(), 8000);
     }
 
-    function createSparkle() {
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
-      sparkle.textContent = '✨';
-      sparkle.style.color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
-      sparkle.style.left = Math.random() * 100 + 'vw';
-      sparkle.style.fontSize = (Math.random() * 8 + 8) + 'px';
-      sparkle.style.animationDuration = (Math.random() * 4 + 3) + 's';
-
-      sparkleContainer.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 8000);
+    // パーティクルの描画
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        ctx.beginPath();
+        if (p.symbol) {
+          ctx.font = `${p.radius * 5}px Arial`;
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.opacity;
+          ctx.fillText(p.symbol, p.x, p.y);
+        } else {
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.opacity;
+          ctx.fill();
+        }
+        ctx.closePath();
+      });
     }
 
-    setInterval(createHeart, 300);
-    setInterval(createSparkle, 500);
-  </script>
+    // パーティクルの更新
+    function updateParticles() {
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
 
-</body>
-</html>
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+      });
+    }
+
+    //
