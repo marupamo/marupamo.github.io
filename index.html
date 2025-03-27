@@ -13,7 +13,7 @@
     }
 
     body {
-      font-family: 'Kiwi Maru', 'sans-serif';
+      font-family: 'Kiwi Maru', sans-serif;
       background: linear-gradient(to bottom, #ffe0f0, #fff0f8);
       color: #555;
       text-align: center;
@@ -26,13 +26,6 @@
       color: #ff66a3;
       font-size: 3em;
       margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .icon {
-      font-size: 2em;
-      margin-bottom: 30px;
       position: relative;
       z-index: 1;
     }
@@ -73,8 +66,9 @@
       margin-top: 15px;
     }
 
-    /* キラキラ星背景 */
-    .stars {
+    /* アニメーション系コンテナ */
+    .hearts-container,
+    .sparkles-container {
       position: fixed;
       top: 0;
       left: 0;
@@ -82,19 +76,27 @@
       height: 100%;
       pointer-events: none;
       z-index: 0;
-      background-image: radial-gradient(#ffaad4 1px, transparent 1px),
-                        radial-gradient(#ffcce6 1px, transparent 1px);
-      background-size: 100px 100px;
-      animation: twinkle 10s linear infinite;
-      opacity: 0.6;
+      overflow: hidden;
     }
 
-    @keyframes twinkle {
-      0% { background-position: 0 0, 50px 50px; }
-      100% { background-position: 100px 100px, 150px 150px; }
+    .heart, .sparkle {
+      position: absolute;
+      animation: fall linear infinite;
+      opacity: 0.7;
     }
 
-    /* フェードインアニメ */
+    @keyframes fall {
+      0% {
+        transform: translateY(-10%) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* カードフェードイン */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -109,7 +111,9 @@
 </head>
 <body>
 
-  <div class="stars"></div> <!-- キラキラ背景 -->
+  <!-- アニメーション用コンテナ -->
+  <div class="hearts-container"></div>
+  <div class="sparkles-container"></div>
 
   <h1>まるぱも⚡🐾</h1>
 
@@ -131,6 +135,53 @@
     <p><a href="https://www.instagram.com/marupamo" target="_blank">Instagram</a></p>
     <p><a href="https://www.youtube.com/@marupamo" target="_blank">YouTube</a></p>
   </div>
+
+  <!-- アニメーションスクリプト -->
+  <script>
+    const heartColors = ['#ffb6c1', '#ffd1dc', '#ffccf9', '#e0bbff', '#cce5ff'];
+    const sparkleColors = ['#fff5cc', '#ffe4e1', '#ffffff'];
+    const bonusEmojis = ['⚡️', '🐾']; // たまに出るやつ！
+
+    const heartContainer = document.querySelector('.hearts-container');
+    const sparkleContainer = document.querySelector('.sparkles-container');
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+
+      // たまに⚡️や🐾を出す（15%くらいの確率）
+      if (Math.random() < 0.15) {
+        heart.textContent = bonusEmojis[Math.floor(Math.random() * bonusEmojis.length)];
+        heart.style.opacity = 0.3; // ふんわり透明
+      } else {
+        heart.textContent = '❤';
+        heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+      }
+
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 10 + 14) + 'px';
+      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+
+      heartContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.textContent = '✨';
+      sparkle.style.color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.fontSize = (Math.random() * 8 + 8) + 'px';
+      sparkle.style.animationDuration = (Math.random() * 4 + 3) + 's';
+
+      sparkleContainer.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 8000);
+    }
+
+    setInterval(createHeart, 300);
+    setInterval(createSparkle, 500);
+  </script>
 
 </body>
 </html>
